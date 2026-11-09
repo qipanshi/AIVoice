@@ -1,0 +1,41 @@
+{
+  "name": "aivoice-mcp-cli",
+  "version": "0.3.1",
+  "private": true,
+  "description": "AIVoice CLI and stdio bridge for authorized meeting results",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "aivoice": "dist/main.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "npm-shrinkwrap.json",
+    "uninstall.ps1",
+    "uninstall.sh"
+  ],
+  "engines": {
+    "node": ">=22.0.0 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qipanshi/AIVoice.git",
+    "directory": "cli"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc --noEmit",
+    "test:cli": "tsx --test tests/cli.test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/server": "2.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3",
+    "tsx": "4.23.15"
+  }
+}

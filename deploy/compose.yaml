@@ -1,0 +1,29 @@
+services:
+  aivoice-mcp:
+    image: aivoice-mcp:0.3.0
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: "18620"
+      AIVOICE_PUBLIC_ORIGIN: ${AIVOICE_PUBLIC_ORIGIN:?Set AIVOICE_PUBLIC_ORIGIN}
+      AIVOICE_BACKEND_ORIGIN: ${AIVOICE_BACKEND_ORIGIN:?Set AIVOICE_BACKEND_ORIGIN}
+      AIVOICE_BRIDGE_SECRET: ${AIVOICE_BRIDGE_SECRET:?Set AIVOICE_BRIDGE_SECRET}
+      AIVOICE_ALLOWED_ORIGINS: ${AIVOICE_ALLOWED_ORIGINS:-}
+      AIVOICE_DATABASE: /app/data/aivoice.sqlite
+    ports:
+      - "127.0.0.1:18620:18620"
+    volumes:
+      - aivoice-auth:/app/data
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 30s
+    mem_limit: 512m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  aivoice-auth:

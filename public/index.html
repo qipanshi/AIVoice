@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="AIVoice 开放平台指南：连接声掌门已有会议、转写和报告，支持MCP、命令行查询与 stdio 桥接。">
+  <title>开放平台 · AIVoice · 棋盘石智能</title>
+  <link rel="icon" href="/aivoice/icon.jpg"><link rel="stylesheet" href="/aivoice/site/site.css">
+  <script src="/aivoice/site/site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#guide">跳到接入指南</a>
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="https://qipanshi.com/" aria-label="棋盘石智能官网"><img src="/aivoice/icon.jpg" alt="" width="38" height="38"><span>棋盘石智能</span></a>
+    <nav class="company-nav" aria-label="官网栏目">
+      <a href="https://qipanshi.com/#hero">首页</a><a href="https://qipanshi.com/#products">核心产品</a><a href="https://qipanshi.com/driver">鼠标驱动</a><a href="https://qipanshi.com/#academy">AI学院</a><a href="https://qipanshi.com/#hongkong">AI出海</a><a href="https://qipanshi.com/#about">关于我们</a><a href="/" aria-current="page">开放平台</a>
+    </nav>
+    <a class="header-contact" href="mailto:50075604@qq.com">接入咨询</a>
+  </div>
+</header>
+<main>
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div><h1 id="hero-title">AIVoice<span>让会议成果，<br>进入你的工作流。</span></h1>
+      <p class="hero-copy">将声掌门中已有的会议、转写与报告，连接到你正在使用的 AI 助手、命令行和行业系统。</p>
+      <div class="hero-actions"><a class="primary" href="#guide">开始接入 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a><a class="quiet-link" href="https://github.com/qipanshi/AIVoice" target="_blank" rel="noopener noreferrer">查看 GitHub 项目 <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div>
+    </div>
+    <aside class="connection" aria-label="服务连接信息">
+      <div class="connection-heading"><img src="/aivoice/icon.jpg" width="48" height="48" alt="AIVoice 图标"><div><strong>AIVoice</strong><span>声掌门会议成果连接服务</span></div></div>
+      <dl><div><dt>传输方式</dt><dd>Streamable HTTP</dd></div><div><dt>授权方式</dt><dd>OAuth · 微信扫码确认</dd></div><div><dt>访问范围</dt><dd>本人 · 已生成 · 只读</dd></div></dl>
+      <div class="endpoint-label">MCP 地址</div><div class="endpoint"><code id="mcp-url">https://open.qipanshi.com/mcp</code><button class="copy icon-copy" data-copy="mcp-url" aria-label="复制 MCP 地址"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg></button></div>
+    </aside>
+  </section>
+  <div class="docs-layout wrap">
+    <aside class="contents"><nav aria-label="本页目录"><strong>接入指南</strong><a href="#guide">选择接入方式</a><a href="#authorization">授权如何完成</a><a href="#capabilities">可以读取什么</a><a href="#compatibility">客户端配置参考</a><a href="#faq">常见问题</a></nav><a class="contact-link" href="mailto:50075604@qq.com">联系技术支持</a></aside>
+    <div class="doc-body">
+      <section id="guide" class="doc-section">
+        <h2>选择适合你的接入方式</h2><p>第一次使用推荐先看“MCP”，无需安装程序。每个客户端按提示独立完成个人授权。</p>
+        <div class="tabs" role="tablist" aria-label="接入方式"><button role="tab" id="tab-http" aria-controls="panel-http" aria-selected="true" data-tab="http">MCP</button><button role="tab" id="tab-cli" aria-controls="panel-cli" aria-selected="false" tabindex="-1" data-tab="cli">命令行 CLI</button><button role="tab" id="tab-stdio" aria-controls="panel-stdio" aria-selected="false" tabindex="-1" data-tab="stdio">本地 stdio 桥接</button></div>
+        <section role="tabpanel" id="panel-http" aria-labelledby="tab-http" tabindex="0">
+          <h3>让 AI 助手连接声掌门</h3><p>使用 WorkBuddy 等支持MCP 与扫码授权的工具，可直接连接，无需安装 CLI。不同工具和版本的界面可能不同。</p>
+          <div class="notice"><strong>开始前先准备</strong><p>准备电脑上的 AI 工具、手机微信及声掌门账号。每位用户使用自己的账号独立授权，无需加入组织或打开组织接入开关；只能读取本人通过设备产生的已有记录。可在声掌门小程序“我的 → 开放平台”查看或解除授权。</p><p>当前服务连接测试环境；正式使用以管理员通知为准。</p></div>
+          <h3>方法一：让 WorkBuddy 帮你接入</h3><p>把下面这段话发送给 WorkBuddy。能否自动修改配置取决于其版本和权限；遇到确认提示请自行核对，扫码授权也需要本人操作。</p>
+          <div class="code-box prompt-box"><div class="code-bar"><span>复制后发给 WorkBuddy</span><button class="copy" data-copy="agent-setup">复制</button></div><pre><code id="agent-setup">请帮我接入 AIVoice 声掌门会议 MCP：
+远程服务地址是 https://open.qipanshi.com/mcp。
+请先检查现有 MCP 配置，保留其他服务，添加名为 AIVoiceRemote 的远程服务。</code></pre></div>
+          <p>如果助手说无法修改配置、要求手动操作，或没有出现授权提示，请按下面的方法操作；不要把登录密码或访问令牌发给助手。</p>
+          <h3>方法二：手动在 WorkBuddy 中添加</h3><p>以下是已在当前测试环境中验证的 WorkBuddy 接入方式；其他版本界面可能不同。此方法无需先安装 CLI。</p>
+          <ol class="steps">
+            <li><strong>打开 MCP 配置</strong><p>在电脑上打开 WorkBuddy，进入“MCP 服务管理”，点击“添加 MCP”，打开 JSON 配置编辑界面。</p></li>
+            <li><strong>添加远程地址并保存</strong><p>如果配置中还没有其他 MCP，可复制下面整段；如果已有其他服务，只将 <code>AIVoiceRemote</code> 项加入已有的 <code>mcpServers</code>，不要覆盖其他项。</p><div class="code-box"><div class="code-bar"><span>WorkBuddy · JSON 配置</span><button class="copy" data-copy="remote-config">复制</button></div><pre><code id="remote-config">{
+  "mcpServers": {
+    "AIVoiceRemote": {
+      "url": "https://open.qipanshi.com/mcp"
+    }
+  }
+}</code></pre></div><p>服务地址也可以单独复制：</p><div class="code-box"><div class="code-bar"><span>MCP 地址</span><button class="copy" data-copy="http-url">复制</button></div><pre><code id="http-url">https://open.qipanshi.com/mcp</code></pre></div></li>
+            <li><strong>使用微信扫码授权</strong><p>在 MCP 列表中找到 AIVoiceRemote，按连接或授权提示打开浏览器。使用绑定声掌门账号的微信扫码，在小程序确认权限后回到 WorkBuddy。CLI 登录不会自动授权其他客户端。</p></li>
+            <li><strong>验证连接并开始使用</strong><p>在 WorkBuddy 中输入：“请用声掌门查询我最近 5 条会议，并读取其中一条已有报告。”查看工具调用是否使用 AIVoiceRemote，并将结果与小程序中的本人记录对照。首次没有记录时，先确认该账号已有设备记录和已生成报告。</p></li>
+          </ol>
+          <div class="notice"><strong>使用千问工作或豆包工作？</strong><p>找到 MCP 或插件管理中的 HTTP 入口，填写上面的远程地址；若支持 OAuth，按提示扫码。仅能填 URL 和请求头不一定代表支持 OAuth。如果无法授权，可以选择上方“本地 stdio 桥接”；具体工具版本需要实测。</p></div>
+          <div class="notice"><strong>只有 URL 和 Headers 输入框？</strong><p>它不能证明该版本支持 OAuth。可改用“本地 stdio 桥接”，先在终端登录，再让工具启动桥接程序。不要在配置中填写小程序登录令牌。</p></div>
+        </section>
+        <section role="tabpanel" id="panel-cli" aria-labelledby="tab-cli" tabindex="0" hidden>
+          <h3>在终端查询自己的会议</h3><p>适合开发者、脚本和自动化流程。安装脚本自动准备独立运行环境；无需预装 Node.js 或 npm。结果以 JSON 输出，便于继续处理。</p>
+          <ol class="steps"><li><strong>安装 CLI</strong><p>在自己的电脑终端执行对应系统的安装命令。安装到个人目录，不修改系统现有 Node.js。</p><div class="code-box"><div class="code-bar"><span>Windows · PowerShell</span><button class="copy" data-copy="cli-install">复制</button></div><pre><code id="cli-install">irm https://open.qipanshi.com/install.ps1 | iex
+aivoice --version</code></pre></div><div class="code-box"><div class="code-bar"><span>macOS / Linux · 终端</span><button class="copy" data-copy="cli-install-unix">复制</button></div><pre><code id="cli-install-unix">curl -fsSL https://open.qipanshi.com/install.sh | sh</code></pre></div><p>安装完成后重新打开终端，再执行 <code>aivoice --version</code>。安装脚本会校验下载文件，并优先从开放平台下载运行环境；平台未提供对应文件时，会提示并尝试 Node.js 官方下载站。</p></li><li><strong>登录并验证连接</strong><div class="code-box"><div class="code-bar"><span>首次授权</span><button class="copy" data-copy="cli-login">复制</button></div><pre><code id="cli-login">aivoice login
+aivoice status</code></pre></div><p>浏览器打开后微信扫码确认。授权保存在当前系统用户的个人目录，后续使用会自动尝试刷新。</p></li><li><strong>查询与读取</strong><div class="code-box"><div class="code-bar"><span>以下日期、会议 ID 为示例，请替换</span><button class="copy" data-copy="cli-read">复制</button></div><pre><code id="cli-read">aivoice meetings --start 2026-11-01 --end 2026-11-06
+aivoice transcript 1001
+aivoice report 1001 --kind standard
+aivoice report 1001 --kind industry</code></pre></div><p>会议 ID 从查询结果获取。返回 <code>nextOffset</code> 时，用 <code>--offset</code> 继续读取下一页或下一段。退出使用 <code>aivoice logout</code>。</p></li></ol><h3>命令参数怎么填写</h3><p>先用 <code>aivoice &lt;命令&gt; --help</code> 查看该命令的完整参数。下列参数都可省略，只有读取正文时的会议 ID 必填。</p><div class="table-scroll"><table><thead><tr><th>适用命令</th><th>参数</th><th>默认与取值</th></tr></thead><tbody><tr><td>所有命令</td><td><code>--server</code> / <code>--profile</code></td><td>官方 MCP 地址 / default</td></tr><tr><td>login</td><td><code>--no-browser</code> / <code>--callback-port</code></td><td>自动打开浏览器 / 0 自动选端口</td></tr><tr><td>meetings</td><td><code>--start</code> / <code>--end</code> / <code>--keyword</code></td><td>不设置筛选；日期 YYYY-MM-DD</td></tr><tr><td>meetings</td><td><code>--offset</code> / <code>--limit</code></td><td>0 / 20；每页 1–50 条</td></tr><tr><td>transcript / report</td><td><code>--offset</code> / <code>--limit</code></td><td>0 / 12000；每段 100–24000 字符</td></tr><tr><td>report</td><td><code>--kind</code></td><td>standard 普通 / industry 行业</td></tr><tr><td>logout</td><td><code>--local</code></td><td>默认远端撤销；此选项仅删本地凭证</td></tr></tbody></table></div>
+        </section>
+        <section role="tabpanel" id="panel-stdio" aria-labelledby="tab-stdio" tabindex="0" hidden>
+          <h3>让支持本地命令的工具连接 MCP</h3><p>工具启动本机 CLI，CLI 负责连接远程服务与刷新个人授权。业务数据仍由声掌门按用户权限校验。</p>
+          <ol class="steps"><li><strong>先安装并登录</strong><div class="code-box"><div class="code-bar"><span>Windows · 在运行工作台的电脑上执行</span><button class="copy" data-copy="bridge-install">复制</button></div><pre><code id="bridge-install">irm https://open.qipanshi.com/install.ps1 | iex
+aivoice login
+aivoice status</code></pre></div><p>macOS / Linux 先执行 <code>curl -fsSL https://open.qipanshi.com/install.sh | sh</code>，重新打开终端后登录。</p></li><li><strong>填写 MCP 配置</strong><p>界面字段：命令填 <code>aivoice</code>，参数填 <code>mcp</code>。使用通用 JSON 入口时可参考：</p><div class="code-box"><div class="code-bar"><span>mcpServers 配置示例</span><button class="copy" data-copy="stdio-config">复制</button></div><pre><code id="stdio-config">{
+  "mcpServers": {
+    "AIVoice": {
+      "command": "aivoice",
+      "args": ["mcp"]
+    }
+  }
+}</code></pre></div><p>各工具字段名以其版本文档为准。Windows 若工具不能启动 <code>aivoice.cmd</code>，可用下方说明中的私有运行时完整路径配置。</p></li><li><strong>回到助手使用</strong><p>保存配置并启用插件。出现三个只读工具后，即可在对话中请求读取与整理本人会议。</p></li></ol><div class="notice"><strong>本地指的是工作台进程所在位置</strong><p>终端和工作台需使用相同系统用户及 profile。DSH 按单用户、单进程或 profile 使用；本方案不面向多人共用一个 DSH 实例。</p></div>
+        </section>
+      </section>
+      <section id="authorization" class="doc-section"><h2>一次确认，持续按权限读取</h2><p>每位用户独立授权。</p><div class="flow"><div><b>发起连接</b><span>客户端或 CLI 打开授权页</span></div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg><div><b>微信扫码确认</b><span>声掌门核对当前用户身份</span></div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg><div><b>读取本人结果</b><span>令牌只用于已授予的范围</span></div></div><p>令牌到期可自动刷新；授权失效时重新登录。可在小程序中撤销授权。</p></section>
+      <section id="capabilities" class="doc-section"><h2>开放的是成果读取能力</h2><div class="table-scroll"><table><caption class="sr-only">AIVoice 工具与用途</caption><thead><tr><th>工具</th><th>用途</th><th>对应 CLI</th></tr></thead><tbody><tr><td><code>list_meetings</code></td><td>按日期、标题查询本人的设备会议</td><td><code>aivoice meetings</code></td></tr><tr><td><code>get_transcript</code></td><td>分段读取已保存的转写</td><td><code>aivoice transcript</code></td></tr><tr><td><code>get_report</code></td><td>读取已有普通报告或行业报告</td><td><code>aivoice report</code></td></tr></tbody></table></div><p>报告尚未生成时会返回未就绪；此接入方式不发起转写、报告或 PPT 生成。周报、待办合并等整理工作由你使用的助手完成。</p></section>
+      <section id="compatibility" class="doc-section"><h2>客户端配置参考</h2><div class="table-scroll"><table><thead><tr><th>工具</th><th>已知配置入口</th><th>接入建议</th></tr></thead><tbody><tr><td>WorkBuddy</td><td>MCP 服务管理 / JSON</td><td>优先参考上方远程地址示例；也可用 stdio</td></tr><tr><td>千问工作</td><td>JSON / Stdio / HTTP / SSE</td><td>尝试 HTTP + OAuth，或本地 stdio</td></tr><tr><td>豆包工作</td><td>插件管理 / HTTP / STDIO</td><td>HTTP 需确认 OAuth；也可尝试 STDIO</td></tr><tr><td>DSH</td><td>取决于 MCP 客户端或插件版本</td><td>单用户下，支持 command 即可尝试桥接</td></tr><tr><td>其他 MCP 工具</td><td>标准远程 HTTP 或本地命令</td><td>按协议能力选择，完成实际授权验证</td></tr></tbody></table></div></section>
+      <section id="faq" class="doc-section"><h2>接入时，你可能会遇到</h2>
+        <details><summary>需要每次提问都扫码吗？</summary><p>通常首次连接时确认一次；授权有效时可继续使用。更换工具或授权失效时，按该工具提示重新扫码。每个人必须使用自己的声掌门账号授权。</p></details>
+        <details><summary>为什么提示 AIVoice 暂未开放？</summary><p>这表示当前服务环境暂未启用开放平台，请联系服务维护人员确认。个人授权可在声掌门小程序“我的 → 开放平台”查看；扫码时请确认使用的是自己的账号。</p></details>
+        <details><summary>AI 会自动选择声掌门吗？</summary><p>AI 会根据问题及可用工具判断，并非必须包含固定关键词。如果连接了多个会议工具，可在提问中说“使用声掌门”或“使用 AIVoiceRemote”，并查看工具调用记录确认。</p></details>
+        <details><summary>工作台找不到 aivoice 命令怎么办？</summary><p>安装后重启工作台，让它重新加载 PATH。Windows 若不支持 .cmd 启动器，命令填写 <code>%LOCALAPPDATA%/AIVoice/versions/&lt;版本&gt;/runtime/node.exe</code> 展开后的完整路径，其中版本替换为本机实际安装版本；参数填写同版本目录下 <code>app/dist/main.js</code> 的完整路径及 <code>mcp</code>。不要把百分号变量原样填到不支持变量展开的工具里。</p></details>
+        <details><summary>为什么已经登录，工作台仍提示未授权？</summary><p>确认工作台和登录终端使用相同系统用户、服务地址与 profile。需要区分配置时先执行 <code>aivoice login --profile work</code>，工作台参数也添加 <code>--profile work</code>。不要复制其他人的凭证。</p></details>
+        <details><summary>如何在无浏览器的服务器上登录？</summary><p>CLI 的回调监听在运行 CLI 的机器上。可在自己的电脑用 SSH 转发固定回调端口，再在服务器执行 <code>aivoice login --no-browser --callback-port 19231</code>。请依据仓库 CLI 文档配置转发；仅把授权链接复制到另一台电脑不够。</p></details>
+        <details><summary>为什么没有查到某一条会议或报告？</summary><p>先确认登录账号、日期范围，以及该条记录是否属于本人并具有既有设备来源。转写、报告尚未保存时不会触发补生成；返回了 <code>nextOffset</code> 时需要继续读取。</p></details>
+        <details><summary>开源后，任何人都能读取数据吗？</summary><p>不能。MIT 许可适用于代码；读取数据需个人授权及服务端逐次校验。源码公开不代表账号、设备记录或访问令牌公开。</p></details>
+        <details><summary>GitHub 链接暂时无法访问？</summary><p>项目仓库公开前需要仓库访问权限。遇到接入问题可联系 <a href="mailto:50075604@qq.com">50075604@qq.com</a>，请勿发送密码或访问令牌。</p></details>
+      </section>
+      <div class="closing"><div><h2>把已完成的会议，接入下一步工作。</h2><p>从你的常用工具开始，连接自己的声掌门成果。</p></div><a href="#guide" class="primary">返回接入指南</a></div>
+    </div>
+  </div>
+</main>
+<footer class="wrap footer"><div><strong>棋盘石智能 · AIVoice</strong><p>声掌门会议成果接入指南</p></div><div><a href="https://qipanshi.com/">公司官网</a><a href="https://github.com/qipanshi/AIVoice">GitHub / MIT</a><a href="mailto:50075604@qq.com">50075604@qq.com</a></div></footer>
+<div id="copy-status" role="status" aria-live="polite" class="copy-status"></div>
+</body></html>
